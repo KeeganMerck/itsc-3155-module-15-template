@@ -1,9 +1,10 @@
-name: "Deploy Workflow"
+name: "Test Workflow"
 
 on:
-  release:
-    types: [published]
-  
+  push:
+    branches:
+      "**"
+
 jobs:
   test_branch:
     name: Test Branch
@@ -25,14 +26,3 @@ jobs:
 
       - name: Run tests
         run: DATABASE_URL=sqlite:///test.db pytest
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: test_branch
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Deploy to Render
-        run: curl ${{secrets.RENDER_DEPLOY_HOOK}}
